@@ -1,0 +1,30 @@
+{
+  "name": "all-crypto-alerts-mavrodi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "nodemonConfig": {
+    "ignore": [
+      "*.json"
+    ]
+  },
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "production": "pm2 start app.js --name all-crypto-alerts-mavrodi"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "node-cron": "^3.0.2",
+    "simple-json-db": "^2.0.0",
+    "telegraf": "^4.12.2",
+    "ws": "^8.15.0"
+  }
+}
