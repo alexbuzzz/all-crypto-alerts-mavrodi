@@ -11,23 +11,18 @@ const start = () => {
 
   if (symbols.length < 200) {
     streams1 = symbols.map((symbol) => `${symbol.toLowerCase()}@kline_1m`)
-    const wsEndpoint1 =
-      'wss://fstream.binance.com/stream?streams=' + streams1.join('/')
+    const wsEndpoint1 = 'wss://fstream.binance.com/stream?streams=' + streams1.join('/')
 
     connectWebSocket1(wsEndpoint1)
   } else {
     const first200Symbols = symbols.slice(0, 200)
     const restOfSymbols = symbols.slice(200)
 
-    streams1 = first200Symbols.map(
-      (symbol) => `${symbol.toLowerCase()}@kline_1m`
-    )
+    streams1 = first200Symbols.map((symbol) => `${symbol.toLowerCase()}@kline_1m`)
     streams2 = restOfSymbols.map((symbol) => `${symbol.toLowerCase()}@kline_1m`)
 
-    const wsEndpoint1 =
-      'wss://fstream.binance.com/stream?streams=' + streams1.join('/')
-    const wsEndpoint2 =
-      'wss://fstream.binance.com/stream?streams=' + streams2.join('/')
+    const wsEndpoint1 = 'wss://fstream.binance.com/stream?streams=' + streams1.join('/')
+    const wsEndpoint2 = 'wss://fstream.binance.com/stream?streams=' + streams2.join('/')
 
     connectWebSocket1(wsEndpoint1)
     connectWebSocket2(wsEndpoint2)
@@ -47,6 +42,10 @@ const connectWebSocket1 = (wsEndpoint) => {
   })
 
   wsClient1.on('message', (data) => {
+    if (data.toString('utf8') === 'pong') {
+      return
+    }
+
     const message = JSON.parse(data)
 
     try {
@@ -54,9 +53,7 @@ const connectWebSocket1 = (wsEndpoint) => {
         const symbol = message.data.s
 
         if (store.currentData.binance.hasOwnProperty(symbol)) {
-          store.currentData.binance[symbol].volInCurr = Math.round(
-            parseFloat(message.data.k.q) / 1000
-          )
+          store.currentData.binance[symbol].volInCurr = Math.round(parseFloat(message.data.k.q) / 1000)
           store.currentData.binance[symbol].openPrice = message.data.k.o
           store.currentData.binance[symbol].closePrice = message.data.k.c
           store.currentData.binance[symbol].highPrice = message.data.k.h
@@ -99,6 +96,10 @@ const connectWebSocket2 = (wsEndpoint) => {
   })
 
   wsClient2.on('message', (data) => {
+    if (data.toString('utf8') === 'pong') {
+      return
+    }
+
     const message = JSON.parse(data)
 
     try {
@@ -106,9 +107,7 @@ const connectWebSocket2 = (wsEndpoint) => {
         const symbol = message.data.s
 
         if (store.currentData.binance.hasOwnProperty(symbol)) {
-          store.currentData.binance[symbol].volInCurr = Math.round(
-            parseFloat(message.data.k.q) / 1000
-          )
+          store.currentData.binance[symbol].volInCurr = Math.round(parseFloat(message.data.k.q) / 1000)
           store.currentData.binance[symbol].openPrice = message.data.k.o
           store.currentData.binance[symbol].closePrice = message.data.k.c
           store.currentData.binance[symbol].highPrice = message.data.k.h

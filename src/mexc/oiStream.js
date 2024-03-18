@@ -28,6 +28,10 @@ const start = () => {
     })
 
     ws.on('message', (data) => {
+      if (data.toString('utf8') === 'pong') {
+        return
+      }
+
       const message = data.toString('utf8')
 
       try {

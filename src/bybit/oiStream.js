@@ -29,6 +29,10 @@ const start = () => {
     })
 
     wsClient.on('message', (data) => {
+      if (data.toString('utf8') === 'pong') {
+        return
+      }
+
       try {
         const message = JSON.parse(data)
         if (message.data && message.data.openInterest) {

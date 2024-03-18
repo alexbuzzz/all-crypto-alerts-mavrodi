@@ -40,6 +40,9 @@ const sendMessage = async (userId, symbol, alertType, headerVal, headerPeriod, e
     case 'mexc':
       exchangeFormated = '🔵 MEXC'
       break
+    case 'blofin':
+      exchangeFormated = '🟢 BLOFIN'
+      break
   }
 
   const messageText = `<strong>${alertType}</strong> (${headerVal} / ${headerPeriod})\n${exchangeFormated} <code>${symbol.replace('-SWAP', '').replace('-', '').replace('_', '')}</code>\n${
@@ -326,6 +329,7 @@ const start = () => {
     fireAlert('bybit')
     fireAlert('okx')
     fireAlert('mexc')
+    fireAlert('blofin')
   }, process.env.CALC_INTERVAL_SECONDS_TELEGRAM * 1000)
 }
 

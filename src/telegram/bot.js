@@ -5,6 +5,7 @@ const binanceCommands = require('./commands/binanceCommands')
 const bybitCommands = require('./commands/bybitCommands')
 const okxCommands = require('./commands/okxCommands')
 const mexcCommands = require('./commands/mexcCommands')
+const blofinCommands = require('./commands/blofinCommands')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
@@ -35,6 +36,9 @@ bot.hears(/mexc_oi_(\d+)/i, mainCommands.mexcOI)
 bot.hears(/mexc_oi_([A-Za-z]+)_(\d+)/i, mainCommands.mexcOISymbol)
 bot.hears(/mexc_vol_boost_(\d+)/i, mainCommands.mexcVolBoost)
 bot.hears(/mexc_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.mexcVolBoostSymbol)
+
+bot.hears(/blofin_vol_boost_(\d+)/i, mainCommands.blofinVolBoost)
+bot.hears(/blofin_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.blofinVolBoostSymbol)
 
 bot.hears(/make_all_(\d+)/i, mainCommands.makeAllFiltersAs)
 
@@ -106,5 +110,21 @@ bot.action('mexcVolBoostSetup2', mexcCommands.mexcVolBoostSetup2)
 bot.action('mexcVolBoostSetup3', mexcCommands.mexcVolBoostSetup3)
 bot.action('mexcVolBoostSetup4', mexcCommands.mexcVolBoostSetup4)
 bot.action('mexcVolBoostSetup5', mexcCommands.mexcVolBoostSetup5)
+
+// BLOFIN
+bot.action('blofin', blofinCommands.blofin)
+
+bot.action('blofinOI', blofinCommands.blofinOI)
+bot.action('blofinOIsetup1', blofinCommands.blofinOIsetup1)
+bot.action('blofinOIsetup2', blofinCommands.blofinOIsetup2)
+bot.action('blofinOIsetup3', blofinCommands.blofinOIsetup3)
+bot.action('blofinOIswitchDirection', blofinCommands.blofinOIswitchDirection)
+
+bot.action('blofinVolBoost', blofinCommands.blofinVolBoost)
+bot.action('blofinVolBoostSetup1', blofinCommands.blofinVolBoostSetup1)
+bot.action('blofinVolBoostSetup2', blofinCommands.blofinVolBoostSetup2)
+bot.action('blofinVolBoostSetup3', blofinCommands.blofinVolBoostSetup3)
+bot.action('blofinVolBoostSetup4', blofinCommands.blofinVolBoostSetup4)
+bot.action('blofinVolBoostSetup5', blofinCommands.blofinVolBoostSetup5)
 
 module.exports = bot

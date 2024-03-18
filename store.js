@@ -10,6 +10,7 @@ const store = {
     bybit: {},
     okx: {},
     mexc: {},
+    blofin: {},
   },
 
   users: {},
@@ -20,6 +21,7 @@ const store = {
     bybit: {},
     okx: {},
     mexc: {},
+    blofin: {},
   },
 
   currentData: {
@@ -27,6 +29,7 @@ const store = {
     bybit: {},
     okx: {},
     mexc: {},
+    blofin: {},
   },
 
   orderBookData: {
@@ -34,6 +37,7 @@ const store = {
     bybit: {},
     okx: {},
     mexc: {},
+    blofin: {},
   },
 }
 

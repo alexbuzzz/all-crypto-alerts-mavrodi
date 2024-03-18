@@ -5,8 +5,8 @@ let wsClient = null
 let pingInterval
 
 const start = () => {
-  const symbols = Object.keys(store.currentData.bybit)
-  const wsEndpoint = 'wss://stream.bybit.com/v5/public/linear'
+  const symbols = Object.keys(store.currentData.blofin)
+  const wsEndpoint = 'wss://openapi.blofin.com/ws/public'
 
   const connectWebSocket = () => {
     // Check if wsClient is already open
@@ -21,7 +21,7 @@ const start = () => {
         subscribeKline(symbol)
       })
 
-      console.log('BYBIT KLINE opened')
+      console.log('BLOFIN KLINE opened')
 
       pingInterval = setInterval(() => {
         sendPing()
@@ -37,22 +37,22 @@ const start = () => {
 
       try {
         if (message.data && message.data[0]) {
-          const vol = message.data[0].volume
-          const symbol = message.topic.slice(8)
-          const candleTime = message.data[0].start
-          const open = message.data[0].open
-          const close = message.data[0].close
-          const high = message.data[0].high
-          const low = message.data[0].low
-          const volInCurr = Math.round((parseFloat(close) * parseFloat(vol)) / 1000)
+          const open = message.data[0][1]
+          const close = message.data[0][4]
+          const high = message.data[0][2]
+          const low = message.data[0][3]
+          const volInCurr = Math.round(parseFloat(message.data[0][7]) / 1000)
 
-          if (store.currentData.bybit.hasOwnProperty(symbol)) {
-            store.currentData.bybit[symbol].volInCurr = volInCurr
-            store.currentData.bybit[symbol].openPrice = open
-            store.currentData.bybit[symbol].closePrice = close
-            store.currentData.bybit[symbol].highPrice = high
-            store.currentData.bybit[symbol].lowPrice = low
-            store.currentData.bybit[symbol].candleTime = candleTime
+          const symbol = message.arg.instId
+          const candleTime = message.data[0][0]
+
+          if (store.currentData.blofin.hasOwnProperty(symbol)) {
+            store.currentData.blofin[symbol].volInCurr = volInCurr
+            store.currentData.blofin[symbol].openPrice = open
+            store.currentData.blofin[symbol].closePrice = close
+            store.currentData.blofin[symbol].highPrice = high
+            store.currentData.blofin[symbol].lowPrice = low
+            store.currentData.blofin[symbol].candleTime = candleTime
           }
         }
 
@@ -66,7 +66,7 @@ const start = () => {
     })
 
     wsClient.on('close', () => {
-      console.log('BYBIT KLINE closed')
+      console.log('BLOFIN KLINE closed')
       clearInterval(pingInterval)
 
       setTimeout(() => {
@@ -87,13 +87,18 @@ const start = () => {
   const subscribeKline = (symbol) => {
     const subscribeMsg = {
       op: 'subscribe',
-      args: [`kline.1.${symbol}`],
+      args: [
+        {
+          channel: 'candle1m',
+          instId: symbol,
+        },
+      ],
     }
 
     try {
       wsClient.send(JSON.stringify(subscribeMsg))
     } catch (error) {
-      console.error('BYBIT subscribe error', error)
+      console.error('blofin subscribe error', error)
     }
   }
 

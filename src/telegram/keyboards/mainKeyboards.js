@@ -7,6 +7,7 @@ const Keyboards = {
       [Markup.button.callback('Bybit', 'bybit')],
       [Markup.button.callback('OKX', 'okx')],
       [Markup.button.callback('MEXC', 'mexc')],
+      [Markup.button.callback('BLOFIN', 'blofin')],
     ]),
 }
 

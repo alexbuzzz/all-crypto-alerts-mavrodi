@@ -23,6 +23,9 @@ const commands = {
           mexc: {
             oiDirection: 'BOTH',
           },
+          blofin: {
+            oiDirection: 'BOTH',
+          },
         }
       } else {
         // Check and add oiDirection if not exists for each exchange
@@ -525,6 +528,67 @@ const commands = {
     }
   },
 
+  // BLOFIN VOL BOOST FILTER
+  blofinVolBoost: (ctx) => {
+    const passedNumber = ctx.match[1]
+
+    // Check and initialize if needed
+    if (!store.customFilters[ctx.chat.id]) {
+      store.customFilters[ctx.chat.id] = {}
+    }
+
+    // Check and initialize exchange if needed
+    if (!store.customFilters[ctx.chat.id]['blofin']) {
+      store.customFilters[ctx.chat.id]['blofin'] = {}
+    }
+
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['blofin']['volBoost']) {
+      store.customFilters[ctx.chat.id]['blofin']['volBoost'] = {}
+    }
+
+    store.customFilters[ctx.chat.id]['blofin']['volBoost'].all = Number(passedNumber)
+
+    const messageText = `✅ BLOFIN VolBoost filter set to: ${passedNumber}K`
+
+    const userIDs = process.env.USER_IDS.split(',')
+
+    if (userIDs.includes(ctx.chat.id.toString())) {
+      ctx.reply(messageText)
+    }
+  },
+
+  // BLOFIN VOL BOOST FILTER SYMBOL
+  blofinVolBoostSymbol: (ctx) => {
+    const passedSymbol = ctx.match[1]
+    const passedNumber = ctx.match[2]
+
+    // Check and initialize if needed
+    if (!store.customFilters[ctx.chat.id]) {
+      store.customFilters[ctx.chat.id] = {}
+    }
+
+    // Check and initialize exchange if needed
+    if (!store.customFilters[ctx.chat.id]['blofin']) {
+      store.customFilters[ctx.chat.id]['blofin'] = {}
+    }
+
+    // Check and initialize alert type if needed
+    if (!store.customFilters[ctx.chat.id]['blofin']['volBoost']) {
+      store.customFilters[ctx.chat.id]['blofin']['volBoost'] = {}
+    }
+
+    store.customFilters[ctx.chat.id]['blofin']['volBoost'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
+
+    const messageText = `✅ BLOFIN VolBoost ${passedSymbol} filter set to: ${passedNumber}K`
+
+    const userIDs = process.env.USER_IDS.split(',')
+
+    if (userIDs.includes(ctx.chat.id.toString())) {
+      ctx.reply(messageText)
+    }
+  },
+
   // MAKE ALL FILTERS AS
   makeAllFiltersAs: (ctx) => {
     const passedNumber = ctx.match[1]
@@ -557,6 +621,12 @@ const commands = {
     store.customFilters[ctx.chat.id]['mexc']['oi'].all = Number(passedNumber)
     store.customFilters[ctx.chat.id]['mexc']['volBoost'] = {}
     store.customFilters[ctx.chat.id]['mexc']['volBoost'].all = Number(passedNumber)
+
+    store.customFilters[ctx.chat.id]['blofin'] = {}
+    store.customFilters[ctx.chat.id]['blofin']['oi'] = {}
+    store.customFilters[ctx.chat.id]['blofin']['oi'].all = Number(passedNumber)
+    store.customFilters[ctx.chat.id]['blofin']['volBoost'] = {}
+    store.customFilters[ctx.chat.id]['blofin']['volBoost'].all = Number(passedNumber)
 
     const messageText = `✅ ALL filters set to: ${passedNumber}K`
 
@@ -598,7 +668,7 @@ const commands = {
 
   // HELP
   filters: (ctx) => {
-    const messageText = `ℹ️ All filters are 250 by default.\n\nYou can set volume filters for each exchange and each alert type and even for specific tickers.\n\nTo do this, send me one of the following commands:\n\n<code>binance_oi_100</code>\n<code>binance_vol_boost_100</code>\n<code>binance_oi_BTCUSDT_100</code>\n<code>binance_vol_boost_BTCUSDT_100</code>\n\n<code>bybit_oi_100</code>\n<code>bybit_vol_boost_100</code>\n<code>bybit_oi_BTCUSDT_100</code>\n<code>bybit_vol_boost_BTCUSDT_100</code>\n\n<code>okx_oi_100</code>\n<code>okx_vol_boost_100</code>\n<code>okx_oi_BTCUSDT_100</code>\n<code>okx_vol_boost_BTCUSDT_100</code>\n\n<code>mexc_oi_100</code>\n<code>mexc_oi_BTCUSDT_100</code>\n<code>mexc_vol_boost_100</code>\n<code>mexc_vol_boost_BTCUSDT_100</code>\n\n⚠️ To overwrite ALL filters use this command:\n<code>make_all_100</code>`
+    const messageText = `ℹ️ All filters are 250 by default.\n\nYou can set volume filters for each exchange and each alert type and even for specific tickers.\n\nTo do this, send me one of the following commands:\n\n<code>binance_oi_100</code>\n<code>binance_vol_boost_100</code>\n<code>binance_oi_BTCUSDT_100</code>\n<code>binance_vol_boost_BTCUSDT_100</code>\n\n<code>bybit_oi_100</code>\n<code>bybit_vol_boost_100</code>\n<code>bybit_oi_BTCUSDT_100</code>\n<code>bybit_vol_boost_BTCUSDT_100</code>\n\n<code>okx_oi_100</code>\n<code>okx_vol_boost_100</code>\n<code>okx_oi_BTCUSDT_100</code>\n<code>okx_vol_boost_BTCUSDT_100</code>\n\n<code>mexc_oi_100</code>\n<code>mexc_oi_BTCUSDT_100</code>\n<code>mexc_vol_boost_100</code>\n<code>mexc_vol_boost_BTCUSDT_100</code>\n\n<code>blofin_vol_boost_100</code>\n<code>blofin_vol_boost_BTCUSDT_100</code>\n\n⚠️ To overwrite ALL filters use this command:\n<code>make_all_100</code>`
 
     const userIDs = process.env.USER_IDS.split(',')
 

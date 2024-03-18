@@ -16,6 +16,8 @@ const okxKlineStream = require('./src/okx/klineStream')
 const getMexcSymbols = require('./src/mexc/getSymbols')
 const mexcOiStream = require('./src/mexc/oiStream')
 const mexcKlineStream = require('./src/mexc/klineStream')
+const getBlofinSymbols = require('./src/blofin/getSymbols')
+const blofinKlineStream = require('./src/blofin/klineStream')
 const collectCandles = require('./src/engine/collectCandles')
 const telegramAlerts = require('./src/engine/telegramAlerts')
 
@@ -88,6 +90,7 @@ const start = async () => {
   await getBybitSymbols()
   await getOKXSymbols()
   await getMexcSymbols()
+  await getBlofinSymbols()
   binanceKlineStream.start()
   binanceOrderbookStreamSpot.start()
   binanceOiStream.start()
@@ -97,6 +100,7 @@ const start = async () => {
   okxKlineStream.start()
   mexcOiStream.start()
   mexcKlineStream.start()
+  blofinKlineStream.start()
   setTimeout(() => {
     telegramAlerts.start()
     collectCandles.start()
@@ -113,6 +117,7 @@ const stop = () => {
   okxKlineStream.stop()
   mexcOiStream.stop()
   mexcKlineStream.stop()
+  blofinKlineStream.stop()
   collectCandles.stop()
   telegramAlerts.stop()
 }
@@ -132,3 +137,7 @@ start()
 
 // Start the Telegram bot
 telegramBot.launch()
+
+// setInterval(() => {
+//   console.log(store.currentData.blofin)
+// }, 5000)
