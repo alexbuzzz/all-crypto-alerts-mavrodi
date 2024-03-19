@@ -7,7 +7,7 @@ const Keyboards = {
 
   blofinVolBoost: () =>
     Markup.inlineKeyboard([
-      [Markup.button.callback('8X / 100min', 'blofinVolBoostSetup1')],
+      [Markup.button.callback('10X / 3min', 'blofinVolBoostSetup1')],
       [Markup.button.callback('12X / 100min', 'blofinVolBoostSetup2')],
       [Markup.button.callback('20X / 100min', 'blofinVolBoostSetup3')],
       [Markup.button.callback('20X / 20min', 'blofinVolBoostSetup4')],

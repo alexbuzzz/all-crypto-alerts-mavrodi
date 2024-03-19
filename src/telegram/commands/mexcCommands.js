@@ -15,7 +15,7 @@ const editOIMessageText = (ctx) => {
 
 const editVolBoostMessageText = (ctx) => {
   ctx.editMessageText(
-    `<strong>MEXC Volume Boost</strong>\n\n${store.users[ctx.chat.id].mexc.volBoostSetup1 ? '✅' : '➖'} 8X / 100min\n\n${store.users[ctx.chat.id].mexc.volBoostSetup2 ? '✅' : '➖'} 12X / 100min\n\n${
+    `<strong>MEXC Volume Boost</strong>\n\n${store.users[ctx.chat.id].mexc.volBoostSetup1 ? '✅' : '➖'} 10X / 3min\n\n${store.users[ctx.chat.id].mexc.volBoostSetup2 ? '✅' : '➖'} 12X / 100min\n\n${
       store.users[ctx.chat.id].mexc.volBoostSetup3 ? '✅' : '➖'
     } 20X / 100min\n\n${store.users[ctx.chat.id].mexc.volBoostSetup4 ? '✅' : '➖'} 20X / 20min\n\n${store.users[ctx.chat.id].mexc.volBoostSetup5 ? '✅' : '➖'} 1X / 1min`,
     {

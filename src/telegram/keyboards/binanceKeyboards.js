@@ -20,7 +20,7 @@ const Keyboards = {
 
   binanceVolBoost: () =>
     Markup.inlineKeyboard([
-      [Markup.button.callback('8X / 100min', 'binanceVolBoostSetup1')],
+      [Markup.button.callback('10X / 3min', 'binanceVolBoostSetup1')],
       [Markup.button.callback('12X / 100min', 'binanceVolBoostSetup2')],
       [Markup.button.callback('20X / 100min', 'binanceVolBoostSetup3')],
       [Markup.button.callback('20X / 20min', 'binanceVolBoostSetup4')],

@@ -10,7 +10,7 @@ const editOIMessageText = (ctx) => {
 
 const editVolBoostMessageText = (ctx) => {
   ctx.editMessageText(
-    `<strong>Blofin Volume Boost</strong>\n\n${store.users[ctx.chat.id].blofin.volBoostSetup1 ? '✅' : '➖'} 8X / 100min\n\n${
+    `<strong>Blofin Volume Boost</strong>\n\n${store.users[ctx.chat.id].blofin.volBoostSetup1 ? '✅' : '➖'} 10X / 3min\n\n${
       store.users[ctx.chat.id].blofin.volBoostSetup2 ? '✅' : '➖'
     } 12X / 100min\n\n${store.users[ctx.chat.id].blofin.volBoostSetup3 ? '✅' : '➖'} 20X / 100min\n\n${store.users[ctx.chat.id].blofin.volBoostSetup4 ? '✅' : '➖'} 20X / 20min\n\n${
       store.users[ctx.chat.id].blofin.volBoostSetup5 ? '✅' : '➖'
