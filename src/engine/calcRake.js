@@ -9,7 +9,7 @@ const calcRake = (exchange, symbol) => {
     const lastItem = historicalData[historicalData.length - 1]
     const avgVolInCurr = historicalData.reduce((acc, cur) => acc + cur.volInCurr, 0) / historicalData.length
 
-    if (lastItem.volInCurr > avgVolInCurr * 5 && lastItem.volInCurr > 1 && historicalData.length > process.env.RAKE_SCAN_PERIOD) {
+    if (lastItem.volInCurr > avgVolInCurr * 10 && lastItem.volInCurr > 1 && historicalData.length > process.env.RAKE_SCAN_PERIOD) {
       historicalData.slice(-1 - process.env.RAKE_SCAN_PERIOD, -1).forEach((item) => {
         const percDiff = (Math.abs(item.volInCurr - lastItem.volInCurr) / lastItem.volInCurr) * 100
 
