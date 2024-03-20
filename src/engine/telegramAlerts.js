@@ -4,6 +4,7 @@ const store = require('../../store')
 const calcOI = require('./calcOI')
 const calcVolumeBoost = require('./calcVolumeBoost')
 const calcPrice = require('./calcPrice')
+const calcRake = require('./calcRake')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
@@ -76,6 +77,7 @@ const fireAlert = (exchange) => {
     const resVolBoost_3min = calcVolumeBoost(exchange, symbol, 3)
     const resVolBoost_1min = calcVolumeBoost(exchange, symbol, 1)
     const resPrice = calcPrice(exchange, symbol)
+    const resCalcRake = calcRake(exchange, symbol)
     let candleVol =
       store.marketData[exchange] && store.marketData[exchange][symbol] && store.marketData[exchange][symbol].currentData && store.marketData[exchange][symbol].currentData.volInCurr
         ? store.marketData[exchange][symbol].currentData.volInCurr
@@ -210,6 +212,17 @@ const fireAlert = (exchange) => {
       ) {
         sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_1min}x`, '1min', exchange, resOI_1min, resVolBoost_1min, candleVol, resPrice)
         store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup5'] = currentTime
+      }
+
+      // RAKE SETUP
+      if (
+        store.users[userId][exchange].rakeSetup1 &&
+        resCalcRake >= customFilter('volBoost') &&
+        (!store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] ||
+          currentTime - store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 5 * 1000)
+      ) {
+        sendMessage(userId, symbol, 'RAKE🔥', `${resCalcRake}K`, '1min', exchange, resOI_1min, resVolBoost_1min, candleVol, resPrice)
+        store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] = currentTime
       }
     })
   })

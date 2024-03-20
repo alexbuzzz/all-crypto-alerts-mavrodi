@@ -126,5 +126,6 @@ bot.action('blofinVolBoostSetup2', blofinCommands.blofinVolBoostSetup2)
 bot.action('blofinVolBoostSetup3', blofinCommands.blofinVolBoostSetup3)
 bot.action('blofinVolBoostSetup4', blofinCommands.blofinVolBoostSetup4)
 bot.action('blofinVolBoostSetup5', blofinCommands.blofinVolBoostSetup5)
+bot.action('blofinRakeSetup1', blofinCommands.blofinRakeSetup1)
 
 module.exports = bot

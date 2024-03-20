@@ -12,6 +12,7 @@ const Keyboards = {
       [Markup.button.callback('20X / 100min', 'blofinVolBoostSetup3')],
       [Markup.button.callback('20X / 20min', 'blofinVolBoostSetup4')],
       [Markup.button.callback('1X / 1min', 'blofinVolBoostSetup5')],
+      [Markup.button.callback('RAKE', 'blofinRakeSetup1')],
       [Markup.button.callback('⬅️ Back', 'blofin')],
     ]),
 }

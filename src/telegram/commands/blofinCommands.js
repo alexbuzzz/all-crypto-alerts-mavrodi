@@ -14,7 +14,7 @@ const editVolBoostMessageText = (ctx) => {
       store.users[ctx.chat.id].blofin.volBoostSetup2 ? '✅' : '➖'
     } 12X / 100min\n\n${store.users[ctx.chat.id].blofin.volBoostSetup3 ? '✅' : '➖'} 20X / 100min\n\n${store.users[ctx.chat.id].blofin.volBoostSetup4 ? '✅' : '➖'} 20X / 20min\n\n${
       store.users[ctx.chat.id].blofin.volBoostSetup5 ? '✅' : '➖'
-    } 1X / 1min`,
+    } 1X / 1min\n\n${store.users[ctx.chat.id].blofin.rakeSetup1 ? '✅' : '➖'} RAKE`,
     {
       parse_mode: 'HTML',
       ...blofinKeyboards.blofinVolBoost(),
@@ -98,6 +98,12 @@ const commands = {
 
   blofinVolBoostSetup5: (ctx) => {
     store.users[ctx.chat.id].blofin.volBoostSetup5 = !store.users[ctx.chat.id].blofin.volBoostSetup5
+
+    editVolBoostMessageText(ctx)
+  },
+
+  blofinRakeSetup1: (ctx) => {
+    store.users[ctx.chat.id].blofin.rakeSetup1 = !store.users[ctx.chat.id].blofin.rakeSetup1
 
     editVolBoostMessageText(ctx)
   },
