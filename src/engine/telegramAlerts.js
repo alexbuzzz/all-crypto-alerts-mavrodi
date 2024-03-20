@@ -219,7 +219,7 @@ const fireAlert = (exchange) => {
         store.users[userId][exchange].rakeSetup1 &&
         resCalcRake >= customFilter('volBoost') &&
         (!store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] ||
-          currentTime - store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 5 * 1000)
+          currentTime - store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
       ) {
         sendMessage(userId, symbol, 'RAKE🔥', `${resCalcRake}K`, '1min', exchange, resOI_1min, resVolBoost_1min, candleVol, resPrice)
         store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] = currentTime
