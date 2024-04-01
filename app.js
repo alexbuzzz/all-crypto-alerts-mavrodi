@@ -18,6 +18,9 @@ const mexcOiStream = require('./src/mexc/oiStream')
 const mexcKlineStream = require('./src/mexc/klineStream')
 const getBlofinSymbols = require('./src/blofin/getSymbols')
 const blofinKlineStream = require('./src/blofin/klineStream')
+const getGateSymbols = require('./src/gate/getSymbols')
+const gateOiStream = require('./src/gate/oiStream')
+const gateKlineStream = require('./src/gate/klineStream')
 const collectCandles = require('./src/engine/collectCandles')
 const telegramAlerts = require('./src/engine/telegramAlerts')
 
@@ -91,6 +94,7 @@ const start = async () => {
   await getOKXSymbols()
   await getMexcSymbols()
   await getBlofinSymbols()
+  await getGateSymbols()
   binanceKlineStream.start()
   binanceOrderbookStreamSpot.start()
   binanceOiStream.start()
@@ -101,6 +105,9 @@ const start = async () => {
   mexcOiStream.start()
   mexcKlineStream.start()
   blofinKlineStream.start()
+  gateOiStream.start()
+  gateKlineStream.start()
+
   setTimeout(() => {
     telegramAlerts.start()
     collectCandles.start()
@@ -118,12 +125,14 @@ const stop = () => {
   mexcOiStream.stop()
   mexcKlineStream.stop()
   blofinKlineStream.stop()
+  gateOiStream.stop()
+  gateKlineStream.stop()
   collectCandles.stop()
   telegramAlerts.stop()
 }
 
 // Restart all every 60 min to get new listed instruments data
-cron.schedule('1,31 * * * *', () => {
+cron.schedule('1 * * * *', () => {
   stop()
 
   // Give time to all websockets stop
@@ -139,5 +148,5 @@ start()
 telegramBot.launch()
 
 // setInterval(() => {
-//   console.log(store.currentData.blofin)
+//   console.log(store.currentData.gate)
 // }, 5000)

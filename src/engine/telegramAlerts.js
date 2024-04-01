@@ -44,6 +44,9 @@ const sendMessage = async (userId, symbol, alertType, headerVal, headerPeriod, e
     case 'blofin':
       exchangeFormated = '🟢 BLOFIN'
       break
+    case 'gate':
+      exchangeFormated = '🟣 GATE'
+      break
   }
 
   const messageText = `<strong>${alertType}</strong> (${headerVal} / ${headerPeriod})\n${exchangeFormated} <code>${symbol.replace('-SWAP', '').replace('-', '').replace('_', '')}</code>\n${
@@ -118,111 +121,117 @@ const fireAlert = (exchange) => {
         }
       }
 
-      // OI SETUP 1 =============================================================
-      if (
-        store.users[userId][exchange].oiSetup1 &&
-        candleVol >= customFilter('oi') &&
-        (((store.users[userId][exchange].oiDirection == 'LONG' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_1min >= 1.5) ||
-          ((store.users[userId][exchange].oiDirection == 'SHORT' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_1min <= -1.5)) &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] || currentTime - store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'Open Interest', `${resOI_1min}%`, '1min', exchange, resOI_1min, resVolBoost_100min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] = currentTime
-      }
+      // Check if exchange exists in userData DB and create it if not
+      if (store.users[userId][exchange]) {
+        // OI SETUP 1 =============================================================
+        if (
+          store.users[userId][exchange].oiSetup1 &&
+          candleVol >= customFilter('oi') &&
+          (((store.users[userId][exchange].oiDirection == 'LONG' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_1min >= 1.5) ||
+            ((store.users[userId][exchange].oiDirection == 'SHORT' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_1min <= -1.5)) &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] || currentTime - store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'Open Interest', `${resOI_1min}%`, '1min', exchange, resOI_1min, resVolBoost_100min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['oiSetup1'] = currentTime
+        }
 
-      // OI SETUP 2 =============================================================
-      if (
-        store.users[userId][exchange].oiSetup2 &&
-        candleVol >= customFilter('oi') &&
-        (((store.users[userId][exchange].oiDirection == 'LONG' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_1min >= 3) ||
-          ((store.users[userId][exchange].oiDirection == 'SHORT' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_1min <= -3)) &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['oiSetup2'] || currentTime - store.lastAlertTimes[userId][exchange][symbol]['oiSetup2'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'Open Interest', `${resOI_1min}%`, '1min', exchange, resOI_1min, resVolBoost_100min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['oiSetup2'] = currentTime
-      }
+        // OI SETUP 2 =============================================================
+        if (
+          store.users[userId][exchange].oiSetup2 &&
+          candleVol >= customFilter('oi') &&
+          (((store.users[userId][exchange].oiDirection == 'LONG' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_1min >= 3) ||
+            ((store.users[userId][exchange].oiDirection == 'SHORT' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_1min <= -3)) &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['oiSetup2'] || currentTime - store.lastAlertTimes[userId][exchange][symbol]['oiSetup2'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'Open Interest', `${resOI_1min}%`, '1min', exchange, resOI_1min, resVolBoost_100min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['oiSetup2'] = currentTime
+        }
 
-      // OI SETUP 3 =============================================================
-      if (
-        store.users[userId][exchange].oiSetup3 &&
-        candleVol >= customFilter('oi') &&
-        (((store.users[userId][exchange].oiDirection == 'LONG' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_5min >= 10) ||
-          ((store.users[userId][exchange].oiDirection == 'SHORT' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_5min <= -10)) &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['oiSetup3'] || currentTime - store.lastAlertTimes[userId][exchange][symbol]['oiSetup3'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'Open Interest', `${resOI_5min}%`, '5min', exchange, resOI_5min, resVolBoost_100min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['oiSetup3'] = currentTime
-      }
+        // OI SETUP 3 =============================================================
+        if (
+          store.users[userId][exchange].oiSetup3 &&
+          candleVol >= customFilter('oi') &&
+          (((store.users[userId][exchange].oiDirection == 'LONG' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_5min >= 10) ||
+            ((store.users[userId][exchange].oiDirection == 'SHORT' || store.users[userId][exchange].oiDirection == 'BOTH') && resOI_5min <= -10)) &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['oiSetup3'] || currentTime - store.lastAlertTimes[userId][exchange][symbol]['oiSetup3'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'Open Interest', `${resOI_5min}%`, '5min', exchange, resOI_5min, resVolBoost_100min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['oiSetup3'] = currentTime
+        }
 
-      // VOL BOOST SETUP 1 ======================================================
-      if (
-        store.users[userId][exchange].volBoostSetup1 &&
-        resVolBoost_3min >= 10 &&
-        candleVol >= customFilter('volBoost') &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] ||
-          currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_3min}x`, '3min', exchange, resOI_1min, resVolBoost_3min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] = currentTime
-      }
+        // VOL BOOST SETUP 1 ======================================================
+        if (
+          store.users[userId][exchange].volBoostSetup1 &&
+          resVolBoost_3min >= 10 &&
+          candleVol >= customFilter('volBoost') &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] ||
+            currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_3min}x`, '3min', exchange, resOI_1min, resVolBoost_3min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup1'] = currentTime
+        }
 
-      // VOL BOOST SETUP 2 ======================================================
-      if (
-        store.users[userId][exchange].volBoostSetup2 &&
-        resVolBoost_100min >= 12 &&
-        candleVol >= customFilter('volBoost') &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup2'] ||
-          currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup2'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_100min}x`, '100min', exchange, resOI_1min, resVolBoost_100min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup2'] = currentTime
-      }
+        // VOL BOOST SETUP 2 ======================================================
+        if (
+          store.users[userId][exchange].volBoostSetup2 &&
+          resVolBoost_100min >= 12 &&
+          candleVol >= customFilter('volBoost') &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup2'] ||
+            currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup2'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_100min}x`, '100min', exchange, resOI_1min, resVolBoost_100min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup2'] = currentTime
+        }
 
-      // VOL BOOST SETUP 3 ======================================================
-      if (
-        store.users[userId][exchange].volBoostSetup3 &&
-        resVolBoost_100min >= 20 &&
-        candleVol >= customFilter('volBoost') &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup3'] ||
-          currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup3'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_100min}x`, '100min', exchange, resOI_1min, resVolBoost_100min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup3'] = currentTime
-      }
+        // VOL BOOST SETUP 3 ======================================================
+        if (
+          store.users[userId][exchange].volBoostSetup3 &&
+          resVolBoost_100min >= 20 &&
+          candleVol >= customFilter('volBoost') &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup3'] ||
+            currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup3'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_100min}x`, '100min', exchange, resOI_1min, resVolBoost_100min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup3'] = currentTime
+        }
 
-      // VOL BOOST SETUP 4 ======================================================
-      if (
-        store.users[userId][exchange].volBoostSetup4 &&
-        resVolBoost_20min >= 20 &&
-        candleVol >= customFilter('volBoost') &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] ||
-          currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_20min}x`, '20min', exchange, resOI_1min, resVolBoost_20min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] = currentTime
-      }
+        // VOL BOOST SETUP 4 ======================================================
+        if (
+          store.users[userId][exchange].volBoostSetup4 &&
+          resVolBoost_20min >= 20 &&
+          candleVol >= customFilter('volBoost') &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] ||
+            currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_20min}x`, '20min', exchange, resOI_1min, resVolBoost_20min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup4'] = currentTime
+        }
 
-      // VOL BOOST SETUP 5 ======================================================
-      if (
-        store.users[userId][exchange].volBoostSetup5 &&
-        resVolBoost_1min >= 1 &&
-        candleVol >= customFilter('volBoost') &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup5'] ||
-          currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup5'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_1min}x`, '1min', exchange, resOI_1min, resVolBoost_1min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup5'] = currentTime
-      }
+        // VOL BOOST SETUP 5 ======================================================
+        if (
+          store.users[userId][exchange].volBoostSetup5 &&
+          resVolBoost_1min >= 1 &&
+          candleVol >= customFilter('volBoost') &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup5'] ||
+            currentTime - store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup5'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'Vol Boost', `${resVolBoost_1min}x`, '1min', exchange, resOI_1min, resVolBoost_1min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['volBoostSetup5'] = currentTime
+        }
 
-      // RAKE SETUP
-      if (
-        store.users[userId][exchange].rakeSetup1 &&
-        resCalcRake >= customFilter('volBoost') &&
-        (!store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] ||
-          currentTime - store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
-      ) {
-        sendMessage(userId, symbol, 'RAKE🔥', `${resCalcRake}K`, '1min', exchange, resOI_1min, resVolBoost_1min, candleVol, resPrice)
-        store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] = currentTime
+        // RAKE SETUP
+        if (
+          store.users[userId][exchange].rakeSetup1 &&
+          resCalcRake >= customFilter('volBoost') &&
+          (!store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] ||
+            currentTime - store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] >= process.env.ALERT_SUSPEND_SECONDS_TELEGRAM * 1000)
+        ) {
+          sendMessage(userId, symbol, 'RAKE🔥', `${resCalcRake}K`, '1min', exchange, resOI_1min, resVolBoost_1min, candleVol, resPrice)
+          store.lastAlertTimes[userId][exchange][symbol]['rakeSetup1'] = currentTime
+        }
+      } else {
+        // Create exchange in userData DB
+        store.users[userId][exchange] = { oiDirection: 'BOTH' }
       }
     })
   })
@@ -344,6 +353,7 @@ const start = () => {
     fireAlert('okx')
     fireAlert('mexc')
     fireAlert('blofin')
+    fireAlert('gate')
   }, process.env.CALC_INTERVAL_SECONDS_TELEGRAM * 1000)
 }
 

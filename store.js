@@ -11,6 +11,7 @@ const store = {
     okx: {},
     mexc: {},
     blofin: {},
+    gate: {},
   },
 
   users: {},
@@ -22,6 +23,7 @@ const store = {
     okx: {},
     mexc: {},
     blofin: {},
+    gate: {},
   },
 
   currentData: {
@@ -30,6 +32,7 @@ const store = {
     okx: {},
     mexc: {},
     blofin: {},
+    gate: {},
   },
 
   orderBookData: {
@@ -38,6 +41,7 @@ const store = {
     okx: {},
     mexc: {},
     blofin: {},
+    gate: {},
   },
 }
 

@@ -6,6 +6,7 @@ const bybitCommands = require('./commands/bybitCommands')
 const okxCommands = require('./commands/okxCommands')
 const mexcCommands = require('./commands/mexcCommands')
 const blofinCommands = require('./commands/blofinCommands')
+const gateCommands = require('./commands/gateCommands')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
@@ -39,6 +40,11 @@ bot.hears(/mexc_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.mexcVolBoostSymbol)
 
 bot.hears(/blofin_vol_boost_(\d+)/i, mainCommands.blofinVolBoost)
 bot.hears(/blofin_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.blofinVolBoostSymbol)
+
+bot.hears(/gate_oi_(\d+)/i, mainCommands.gateOI)
+bot.hears(/gate_oi_([A-Za-z]+)_(\d+)/i, mainCommands.gateOISymbol)
+bot.hears(/gate_vol_boost_(\d+)/i, mainCommands.gateVolBoost)
+bot.hears(/gate_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.gateVolBoostSymbol)
 
 bot.hears(/make_all_(\d+)/i, mainCommands.makeAllFiltersAs)
 
@@ -127,5 +133,21 @@ bot.action('blofinVolBoostSetup3', blofinCommands.blofinVolBoostSetup3)
 bot.action('blofinVolBoostSetup4', blofinCommands.blofinVolBoostSetup4)
 bot.action('blofinVolBoostSetup5', blofinCommands.blofinVolBoostSetup5)
 bot.action('blofinRakeSetup1', blofinCommands.blofinRakeSetup1)
+
+// GATE
+bot.action('gate', gateCommands.gate)
+
+bot.action('gateOI', gateCommands.gateOI)
+bot.action('gateOIsetup1', gateCommands.gateOIsetup1)
+bot.action('gateOIsetup2', gateCommands.gateOIsetup2)
+bot.action('gateOIsetup3', gateCommands.gateOIsetup3)
+bot.action('gateOIswitchDirection', gateCommands.gateOIswitchDirection)
+
+bot.action('gateVolBoost', gateCommands.gateVolBoost)
+bot.action('gateVolBoostSetup1', gateCommands.gateVolBoostSetup1)
+bot.action('gateVolBoostSetup2', gateCommands.gateVolBoostSetup2)
+bot.action('gateVolBoostSetup3', gateCommands.gateVolBoostSetup3)
+bot.action('gateVolBoostSetup4', gateCommands.gateVolBoostSetup4)
+bot.action('gateVolBoostSetup5', gateCommands.gateVolBoostSetup5)
 
 module.exports = bot
