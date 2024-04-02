@@ -49,11 +49,11 @@ const sendMessage = async (userId, symbol, alertType, headerVal, headerPeriod, e
       break
   }
 
-  const messageText = `<strong>${alertType}</strong> (${headerVal} / ${headerPeriod})\n${exchangeFormated} <code>${symbol.replace('-SWAP', '').replace('-', '').replace('_', '')}</code>\n${
-    oiVal >= process.env.OI_HIGHTLIGHT ? '🔥' : '➖'
-  } OI ${oiVal}%\n${volBoostVal >= process.env.VOLUME_BOOST_HIGHTLIGHT ? '🔥' : '➖'} Vol Boost ${volBoostVal}x\n${volVal >= process.env.VOL_IN_CURRENCY_HIGHTLIGHT ? '🔥' : '➖'} Vol ${formatNumber(
-    volVal
-  )} ($)\n${priceVal >= process.env.PRICE_CHANGE_HIGHTLIGHT ? '🔥' : '➖'} Price ${priceVal}%`
+  const messageText = `<strong>${alertType}</strong> (${headerVal} / ${headerPeriod})\n${exchangeFormated} <code>${
+    exchange === 'gate' ? symbol.replace('-SWAP', '').replace('-', '').replace('_', '').replace('USDT', '/USDT') : symbol.replace('-SWAP', '').replace('-', '').replace('_', '')
+  }</code>\n${oiVal >= process.env.OI_HIGHTLIGHT ? '🔥' : '➖'} OI ${oiVal}%\n${volBoostVal >= process.env.VOLUME_BOOST_HIGHTLIGHT ? '🔥' : '➖'} Vol Boost ${volBoostVal}x\n${
+    volVal >= process.env.VOL_IN_CURRENCY_HIGHTLIGHT ? '🔥' : '➖'
+  } Vol ${formatNumber(volVal)} ($)\n${priceVal >= process.env.PRICE_CHANGE_HIGHTLIGHT ? '🔥' : '➖'} Price ${priceVal}%`
 
   try {
     await bot.telegram.sendMessage(userId, messageText, {
