@@ -16,6 +16,7 @@ const okxKlineStream = require('./src/okx/klineStream')
 const getMexcSymbols = require('./src/mexc/getSymbols')
 const mexcOiStream = require('./src/mexc/oiStream')
 const mexcKlineStream = require('./src/mexc/klineStream')
+const mexcFutPokupantStream = require('./src/mexc/futPokupantStream')
 const getBlofinSymbols = require('./src/blofin/getSymbols')
 const blofinKlineStream = require('./src/blofin/klineStream')
 const getGateSymbols = require('./src/gate/getSymbols')
@@ -23,6 +24,7 @@ const gateOiStream = require('./src/gate/oiStream')
 const gateKlineStream = require('./src/gate/klineStream')
 const collectCandles = require('./src/engine/collectCandles')
 const telegramAlerts = require('./src/engine/telegramAlerts')
+const pokupantAlerts = require('./src/engine/pokupantAlerts')
 
 const store = require('./store')
 
@@ -104,12 +106,14 @@ const start = async () => {
   okxKlineStream.start()
   mexcOiStream.start()
   mexcKlineStream.start()
+  mexcFutPokupantStream.start()
   blofinKlineStream.start()
   gateOiStream.start()
   gateKlineStream.start()
 
   setTimeout(() => {
     telegramAlerts.start()
+    pokupantAlerts.start()
     collectCandles.start()
   }, 10 * 1000) // Give time to all websockets start
 }
@@ -124,11 +128,13 @@ const stop = () => {
   okxKlineStream.stop()
   mexcOiStream.stop()
   mexcKlineStream.stop()
+  mexcFutPokupantStream.stop()
   blofinKlineStream.stop()
   gateOiStream.stop()
   gateKlineStream.stop()
   collectCandles.stop()
   telegramAlerts.stop()
+  pokupantAlerts.stop()
 }
 
 // Restart all every 60 min to get new listed instruments data
@@ -148,5 +154,5 @@ start()
 telegramBot.launch()
 
 // setInterval(() => {
-//   console.log(store.currentData.gate)
-// }, 5000)
+//   console.log(store.pokupantData.mexc.fut.long)
+// }, 1000)
