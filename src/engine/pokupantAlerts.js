@@ -8,6 +8,10 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 
 let alertInterval = null
 
+const capitalizeFirstLetter = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
 const formatNumber = (number) => {
   if (number >= 1e9) {
     const formattedNumber = number / 1e9
@@ -23,7 +27,7 @@ const formatNumber = (number) => {
   }
 }
 
-const sendMessage = async (symbol, exchange, market, side, vol) => {
+const sendMessage = async (userId, symbol, exchange, market, side, vol) => {
   let exchangeFormated = ''
 
   switch (exchange) {
@@ -51,29 +55,87 @@ const sendMessage = async (symbol, exchange, market, side, vol) => {
     exchange === 'gate' ? symbol.replace('-SWAP', '').replace('-', '').replace('_', '').replace('USDT', '/USDT') : symbol.replace('-SWAP', '').replace('-', '').replace('_', '')
   }</code>\n\n ${market.toUpperCase()} ${side.toUpperCase()} ${formatNumber(vol)}`
 
-  const users = Object.keys(store.users)
-
-  users.forEach(async (userId) => {
-    try {
-      await bot.telegram.sendMessage(userId, messageText, {
-        parse_mode: 'HTML',
-      })
-    } catch (error) {
-      if (error.response && error.response.error_code === 403) {
-        // console.error(`User has blocked the bot for chat_id: ${userId}`)
-      } else {
-        console.error('Error sending message:', error)
-      }
+  try {
+    await bot.telegram.sendMessage(userId, messageText, {
+      parse_mode: 'HTML',
+    })
+  } catch (error) {
+    if (error.response && error.response.error_code === 403) {
+      // console.error(`User has blocked the bot for chat_id: ${userId}`)
+    } else {
+      console.error('Error sending message:', error)
     }
-  })
+  }
 }
 
 const start = () => {
   alertInterval = setInterval(() => {
+    const currentTime = Math.floor(Date.now() / 1000)
     const res = detectPokupant(store.pokupantData, process.env.POKUPANT_TOLERANCE_PERC, process.env.POKUPANT_MIN_TRADES_COUNT)
-    if (res !== null) {
-      sendMessage(res.symbol, res.exchange, res.market, res.side, res.vol)
-    }
+
+    const users = Object.keys(store.users)
+
+    users.forEach(async (userId) => {
+      if (
+        res !== null &&
+        res &&
+        res.exchange &&
+        res.market &&
+        res.side &&
+        res.symbol &&
+        res.vol &&
+        store.users?.[userId]?.[res.exchange]?.[`pokupant${capitalizeFirstLetter(res.market)}${capitalizeFirstLetter(res.side)}`] &&
+        (!store.lastAlertTimesPokupant?.[userId]?.[res.exchange]?.[res.symbol]?.[res.market]?.[res.side] ||
+          currentTime - store.lastAlertTimesPokupant?.[userId]?.[res.exchange]?.[res.symbol]?.[res.market]?.[res.side] >= process.env.POKUPANT_ALERT_SUSPEND_SEC)
+      ) {
+        // Check and initialize if needed
+        if (!store.lastAlertTimesPokupant[userId]) {
+          store.lastAlertTimesPokupant[userId] = {}
+        }
+
+        // Check and initialize exchange if needed
+        if (!store.lastAlertTimesPokupant[userId][res.exchange]) {
+          store.lastAlertTimesPokupant[userId][res.exchange] = {}
+        }
+
+        // Check and initialize symbol if needed
+        if (!store.lastAlertTimesPokupant[userId][res.exchange][res.symbol]) {
+          store.lastAlertTimesPokupant[userId][res.exchange][res.symbol] = {}
+        }
+
+        // Check and initialize market if needed
+        if (!store.lastAlertTimesPokupant[userId][res.exchange][res.symbol][res.market]) {
+          store.lastAlertTimesPokupant[userId][res.exchange][res.symbol][res.market] = {}
+        }
+
+        // Check and initialize side if needed
+        if (!store.lastAlertTimesPokupant[userId][res.exchange][res.symbol][res.market][res.side]) {
+          store.lastAlertTimesPokupant[userId][res.exchange][res.symbol][res.market][res.side] = {}
+        }
+
+        // Custom filter
+        const customFilter = () => {
+          if (store.pokupantCustomFilters[userId] && store.pokupantCustomFilters[userId][res.exchange] && store.pokupantCustomFilters[userId][res.exchange][res.market]) {
+            if (store.pokupantCustomFilters[userId][res.exchange][res.market].hasOwnProperty(res.symbol.replace('USDT', '').replace('-SWAP', '').replace('-', '').replace('_', ''))) {
+              return store.pokupantCustomFilters[userId][res.exchange][res.market][res.symbol.replace('USDT', '').replace('-SWAP', '').replace('-', '').replace('_', '')]
+            } else {
+              if (store.pokupantCustomFilters[userId][res.exchange][res.market].all) {
+                return store.pokupantCustomFilters[userId][res.exchange][res.market].all
+              } else {
+                return process.env.POKUPANT_DEFAULT_TRADES_FILTER
+              }
+            }
+          } else {
+            return process.env.POKUPANT_DEFAULT_TRADES_FILTER
+          }
+        }
+
+        if (res.vol >= customFilter() * 1000) {
+          sendMessage(userId, res.symbol, res.exchange, res.market, res.side, res.vol)
+          store.lastAlertTimesPokupant[userId][res.exchange][res.symbol][res.market][res.side] = currentTime
+        }
+      }
+    })
 
     removeOldPokupantItems(store.pokupantData)
   }, process.env.CALC_INTERVAL_SECONDS_TELEGRAM * 1000)

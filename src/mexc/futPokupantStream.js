@@ -45,20 +45,20 @@ const start = () => {
           const volInCurr = Math.round(price * vol)
 
           const exceptions = process.env.POKUPANT_EXCEPTIONS ? process.env.POKUPANT_EXCEPTIONS.split(',') : []
-          //const exceptions = ['BTC', 'ETH', 'SOL', 'BCH', 'ADA', 'LTC', 'APT', 'BNB', 'SUSHI', 'YFI', 'AVAX', 'ICP']
 
-          if (volInCurr >= process.env.POKUPANT_TRADES_FILTER_DOLLARS && !exceptions.some((exception) => symbol.includes(exception)) && side === 1) {
+          if (volInCurr >= process.env.POKUPANT_MIN_TRADES_FILTER * 1000 && !exceptions.some((exception) => symbol.includes(exception))) {
             const currentTime = Math.floor(Date.now() / 1000)
+            const sideFormatted = side === 1 ? 'long' : 'short'
 
             const newItem = {
               vol: volInCurr,
               time: currentTime,
             }
 
-            if (!store.pokupantData.mexc.fut.long[symbol]) {
-              store.pokupantData.mexc.fut.long[symbol] = []
+            if (!store.pokupantData.mexc.fut[sideFormatted][symbol]) {
+              store.pokupantData.mexc.fut[sideFormatted][symbol] = []
             }
-            store.pokupantData.mexc.fut.long[symbol].push(newItem)
+            store.pokupantData.mexc.fut[sideFormatted][symbol].push(newItem)
           }
         }
       } catch (error) {

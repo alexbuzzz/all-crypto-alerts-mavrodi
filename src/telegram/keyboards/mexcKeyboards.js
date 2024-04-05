@@ -1,7 +1,13 @@
 const { Markup } = require('telegraf')
 
 const Keyboards = {
-  alertTypes: () => Markup.inlineKeyboard([[Markup.button.callback('OI', 'mexcOI')], [Markup.button.callback('Volume boost', 'mexcVolBoost')], [Markup.button.callback('⬅️ Back', 'backToMain')]]),
+  alertTypes: () =>
+    Markup.inlineKeyboard([
+      [Markup.button.callback('OI', 'mexcOI')],
+      [Markup.button.callback('Volume boost', 'mexcVolBoost')],
+      [Markup.button.callback('Pokupant', 'mexcPokupant')],
+      [Markup.button.callback('⬅️ Back', 'backToMain')],
+    ]),
 
   mexcOI: () =>
     Markup.inlineKeyboard([
@@ -19,6 +25,13 @@ const Keyboards = {
       [Markup.button.callback('20X / 100min', 'mexcVolBoostSetup3')],
       [Markup.button.callback('20X / 20min', 'mexcVolBoostSetup4')],
       [Markup.button.callback('1X / 1min', 'mexcVolBoostSetup5')],
+      [Markup.button.callback('⬅️ Back', 'mexc')],
+    ]),
+
+  mexcPokupant: () =>
+    Markup.inlineKeyboard([
+      [Markup.button.callback('Switch LONG', 'mexcPokupantFutLong')],
+      [Markup.button.callback('Switch SHORT', 'mexcPokupantFutShort')],
       [Markup.button.callback('⬅️ Back', 'mexc')],
     ]),
 }

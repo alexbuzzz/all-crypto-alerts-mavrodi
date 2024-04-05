@@ -69,9 +69,9 @@ if (lastAlertTimes) {
 }
 
 // Pull last alers WS times from DB
-const lastAlertTimesWS = appSettingsDb.get('lastAlertTimesWS')
-if (lastAlertTimesWS) {
-  store.lastAlertTimesWS = lastAlertTimesWS
+const lastAlertTimesPokupant = appSettingsDb.get('lastAlertTimesPokupant')
+if (lastAlertTimesPokupant) {
+  store.lastAlertTimesPokupant = lastAlertTimesPokupant
 }
 
 // Pull custom filters from DB
@@ -80,14 +80,21 @@ if (customFilters) {
   store.customFilters = customFilters
 }
 
+// Pull pokupant custom filters from DB
+const pokupantCustomFilters = userDataDb.get('pokupantCustomFilters')
+if (pokupantCustomFilters) {
+  store.pokupantCustomFilters = pokupantCustomFilters
+}
+
 // Save store data in DB by CRON
 cron.schedule('*/10 * * * * *', () => {
   marketDataDb.set('data', store.marketData)
   userDataDb.set('users', store.users)
   appSettingsDb.set('messageIDs', store.messageIDs)
   appSettingsDb.set('lastAlertTimes', store.lastAlertTimes)
-  appSettingsDb.set('lastAlertTimesWS', store.lastAlertTimesWS)
+  appSettingsDb.set('lastAlertTimesPokupant', store.lastAlertTimesPokupant)
   userDataDb.set('customFilters', store.customFilters)
+  userDataDb.set('pokupantCustomFilters', store.pokupantCustomFilters)
 })
 
 const start = async () => {

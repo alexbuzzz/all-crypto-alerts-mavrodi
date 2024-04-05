@@ -13,40 +13,47 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.start(mainCommands.start)
 bot.hears('/test', mainCommands.test)
 bot.hears('/filters', mainCommands.filters)
+bot.hears('/pokupant_filters', mainCommands.pokupantFilters)
 bot.hears('/settings', mainCommands.settings)
 bot.hears('🎛 Settings', mainCommands.settings)
 bot.action('backToMain', mainCommands.backToMain)
 
 // Vol Filters
+bot.hears(/binance_oi_([A-Za-z0-9]+)_(\d+)/i, mainCommands.binanceOISymbol)
 bot.hears(/binance_oi_(\d+)/i, mainCommands.binanceOI)
-bot.hears(/binance_oi_([A-Za-z]+)_(\d+)/i, mainCommands.binanceOISymbol)
+bot.hears(/binance_vol_boost_([A-Za-z0-9]+)_(\d+)/i, mainCommands.binanceVolBoostSymbol)
 bot.hears(/binance_vol_boost_(\d+)/i, mainCommands.binanceVolBoost)
-bot.hears(/binance_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.binanceVolBoostSymbol)
 
+bot.hears(/bybit_oi_([A-Za-z0-9]+)_(\d+)/i, mainCommands.bybitOISymbol)
 bot.hears(/bybit_oi_(\d+)/i, mainCommands.bybitOI)
-bot.hears(/bybit_oi_([A-Za-z]+)_(\d+)/i, mainCommands.bybitOISymbol)
+bot.hears(/bybit_vol_boost_([A-Za-z0-9]+)_(\d+)/i, mainCommands.bybitVolBoostSymbol)
 bot.hears(/bybit_vol_boost_(\d+)/i, mainCommands.bybitVolBoost)
-bot.hears(/bybit_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.bybitVolBoostSymbol)
 
+bot.hears(/okx_oi_([A-Za-z0-9]+)_(\d+)/i, mainCommands.okxOISymbol)
 bot.hears(/okx_oi_(\d+)/i, mainCommands.okxOI)
-bot.hears(/okx_oi_([A-Za-z]+)_(\d+)/i, mainCommands.okxOISymbol)
+bot.hears(/okx_vol_boost_([A-Za-z0-9]+)_(\d+)/i, mainCommands.okxVolBoostSymbol)
 bot.hears(/okx_vol_boost_(\d+)/i, mainCommands.okxVolBoost)
-bot.hears(/okx_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.okxVolBoostSymbol)
 
+bot.hears(/mexc_oi_([A-Za-z0-9]+)_(\d+)/i, mainCommands.mexcOISymbol)
 bot.hears(/mexc_oi_(\d+)/i, mainCommands.mexcOI)
-bot.hears(/mexc_oi_([A-Za-z]+)_(\d+)/i, mainCommands.mexcOISymbol)
+bot.hears(/mexc_vol_boost_([A-Za-z0-9]+)_(\d+)/i, mainCommands.mexcVolBoostSymbol)
 bot.hears(/mexc_vol_boost_(\d+)/i, mainCommands.mexcVolBoost)
-bot.hears(/mexc_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.mexcVolBoostSymbol)
 
+bot.hears(/blofin_vol_boost_([A-Za-z0-9]+)_(\d+)/i, mainCommands.blofinVolBoostSymbol)
 bot.hears(/blofin_vol_boost_(\d+)/i, mainCommands.blofinVolBoost)
-bot.hears(/blofin_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.blofinVolBoostSymbol)
 
+bot.hears(/gate_oi_([A-Za-z0-9]+)_(\d+)/i, mainCommands.gateOISymbol)
 bot.hears(/gate_oi_(\d+)/i, mainCommands.gateOI)
-bot.hears(/gate_oi_([A-Za-z]+)_(\d+)/i, mainCommands.gateOISymbol)
+bot.hears(/gate_vol_boost_([A-Za-z0-9]+)_(\d+)/i, mainCommands.gateVolBoostSymbol)
 bot.hears(/gate_vol_boost_(\d+)/i, mainCommands.gateVolBoost)
-bot.hears(/gate_vol_boost_([A-Za-z]+)_(\d+)/i, mainCommands.gateVolBoostSymbol)
 
 bot.hears(/make_all_(\d+)/i, mainCommands.makeAllFiltersAs)
+
+// Pokupant Vol Filters
+bot.hears(/mexc_fut_pokupant_([A-Za-z0-9]+)_(\d+)/i, mainCommands.pokupantMexcFutSymbol)
+bot.hears(/mexc_fut_pokupant_(\d+)/i, mainCommands.pokupantMexcFut)
+
+bot.hears(/make_all_pokupant_(\d+)/i, mainCommands.makeAllPokupantFiltersAs)
 
 // Binance
 bot.action('binance', binanceCommands.binance)
@@ -116,6 +123,10 @@ bot.action('mexcVolBoostSetup2', mexcCommands.mexcVolBoostSetup2)
 bot.action('mexcVolBoostSetup3', mexcCommands.mexcVolBoostSetup3)
 bot.action('mexcVolBoostSetup4', mexcCommands.mexcVolBoostSetup4)
 bot.action('mexcVolBoostSetup5', mexcCommands.mexcVolBoostSetup5)
+
+bot.action('mexcPokupant', mexcCommands.mexcPokupant)
+bot.action('mexcPokupantFutLong', mexcCommands.mexcPokupantFutLong)
+bot.action('mexcPokupantFutShort', mexcCommands.mexcPokupantFutShort)
 
 // BLOFIN
 bot.action('blofin', blofinCommands.blofin)

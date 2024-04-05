@@ -768,6 +768,89 @@ const commands = {
     }
   },
 
+  // MAKE ALL POKUPANT FILTERS AS
+  makeAllPokupantFiltersAs: (ctx) => {
+    const passedNumber = ctx.match[1]
+
+    // Check and initialize if needed
+    if (!store.pokupantCustomFilters[ctx.chat.id]) {
+      store.pokupantCustomFilters[ctx.chat.id] = {}
+    }
+
+    store.pokupantCustomFilters[ctx.chat.id]['mexc'] = {}
+    store.pokupantCustomFilters[ctx.chat.id]['mexc']['fut'] = {}
+    store.pokupantCustomFilters[ctx.chat.id]['mexc']['fut'].all = Number(passedNumber)
+
+    const messageText = `✅ ALL pokupant filters set to: ${passedNumber}K`
+
+    const userIDs = process.env.USER_IDS.split(',')
+
+    if (userIDs.includes(ctx.chat.id.toString())) {
+      ctx.reply(messageText)
+    }
+  },
+
+  // MEXC FUT POKUPANT FILTER
+  pokupantMexcFut: (ctx) => {
+    const passedNumber = ctx.match[1]
+
+    // Check and initialize if needed
+    if (!store.pokupantCustomFilters[ctx.chat.id]) {
+      store.pokupantCustomFilters[ctx.chat.id] = {}
+    }
+
+    // Check and initialize exchange if needed
+    if (!store.pokupantCustomFilters[ctx.chat.id]['mexc']) {
+      store.pokupantCustomFilters[ctx.chat.id]['mexc'] = {}
+    }
+
+    // Check and initialize alert type if needed
+    if (!store.pokupantCustomFilters[ctx.chat.id]['mexc']['fut']) {
+      store.pokupantCustomFilters[ctx.chat.id]['mexc']['fut'] = {}
+    }
+
+    store.pokupantCustomFilters[ctx.chat.id]['mexc']['fut'].all = Number(passedNumber)
+
+    const messageText = `✅ MEXC Fut Pokupant filter set to: ${passedNumber}K`
+
+    const userIDs = process.env.USER_IDS.split(',')
+
+    if (userIDs.includes(ctx.chat.id.toString())) {
+      ctx.reply(messageText)
+    }
+  },
+
+  // MEXC FUT POKUPANT FILTER SYMBOL
+  pokupantMexcFutSymbol: (ctx) => {
+    const passedSymbol = ctx.match[1]
+    const passedNumber = ctx.match[2]
+
+    // Check and initialize if needed
+    if (!store.pokupantCustomFilters[ctx.chat.id]) {
+      store.pokupantCustomFilters[ctx.chat.id] = {}
+    }
+
+    // Check and initialize exchange if needed
+    if (!store.pokupantCustomFilters[ctx.chat.id]['mexc']) {
+      store.pokupantCustomFilters[ctx.chat.id]['mexc'] = {}
+    }
+
+    // Check and initialize alert type if needed
+    if (!store.pokupantCustomFilters[ctx.chat.id]['mexc']['fut']) {
+      store.pokupantCustomFilters[ctx.chat.id]['mexc']['fut'] = {}
+    }
+
+    store.pokupantCustomFilters[ctx.chat.id]['mexc']['fut'][passedSymbol.toUpperCase().replace('USDT', '')] = Number(passedNumber)
+
+    const messageText = `✅ MEXC Fut ${passedSymbol} Pokupant filter set to: ${passedNumber}K`
+
+    const userIDs = process.env.USER_IDS.split(',')
+
+    if (userIDs.includes(ctx.chat.id.toString())) {
+      ctx.reply(messageText)
+    }
+  },
+
   // TEST
   test: (ctx) => {
     const date = new Date(store.marketData.lastUpdateTime)
@@ -797,9 +880,22 @@ const commands = {
     }
   },
 
-  // HELP
+  // FILTERS
   filters: (ctx) => {
     const messageText = `ℹ️ All filters are 250 by default.\n\nYou can set volume filters for each exchange and each alert type and even for specific tickers.\n\nTo do this, send me one of the following commands:\n\n<code>binance_oi_100</code>\n<code>binance_vol_boost_100</code>\n<code>binance_oi_BTCUSDT_100</code>\n<code>binance_vol_boost_BTCUSDT_100</code>\n\n<code>bybit_oi_100</code>\n<code>bybit_vol_boost_100</code>\n<code>bybit_oi_BTCUSDT_100</code>\n<code>bybit_vol_boost_BTCUSDT_100</code>\n\n<code>okx_oi_100</code>\n<code>okx_vol_boost_100</code>\n<code>okx_oi_BTCUSDT_100</code>\n<code>okx_vol_boost_BTCUSDT_100</code>\n\n<code>mexc_oi_100</code>\n<code>mexc_oi_BTCUSDT_100</code>\n<code>mexc_vol_boost_100</code>\n<code>mexc_vol_boost_BTCUSDT_100</code>\n\n<code>blofin_vol_boost_100</code>\n<code>blofin_vol_boost_BTCUSDT_100</code>\n\n<code>gate_oi_100</code>\n<code>gate_oi_BTCUSDT_100</code>\n<code>gate_vol_boost_100</code>\n<code>gate_vol_boost_BTCUSDT_100</code>\n\n⚠️ To overwrite ALL filters use this command:\n<code>make_all_100</code>`
+
+    const userIDs = process.env.USER_IDS.split(',')
+
+    if (userIDs.includes(ctx.chat.id.toString())) {
+      ctx.reply(messageText, {
+        parse_mode: 'HTML',
+      })
+    }
+  },
+
+  // POKUPANT FILTERS
+  pokupantFilters: (ctx) => {
+    const messageText = `ℹ️ All pokupant filters are 15 by default.\n\nYou can set trade volume filters for each exchange and each alert type and even for specific tickers.\n\nTo do this, send me one of the following commands:\n\n<code>mexc_fut_pokupant_10</code>\n<code>mexc_fut_pokupant_BTCUSDT_10</code>\n\n⚠️ To overwrite ALL filters use this command:\n<code>make_all_pokupant_10</code>`
 
     const userIDs = process.env.USER_IDS.split(',')
 

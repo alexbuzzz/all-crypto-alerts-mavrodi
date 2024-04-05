@@ -25,6 +25,16 @@ const editVolBoostMessageText = (ctx) => {
   )
 }
 
+const editPokupantMessageText = (ctx) => {
+  ctx.editMessageText(
+    `<strong>MEXC Pokupant</strong>\n\n${store.users[ctx.chat.id].mexc.pokupantFutLong ? '✅' : '➖'} LONG\n\n${store.users[ctx.chat.id].mexc.pokupantFutShort ? '✅' : '➖'} SHORT`,
+    {
+      parse_mode: 'HTML',
+      ...mexcKeyboards.mexcPokupant(),
+    }
+  )
+}
+
 const commands = {
   // MEXC
   mexc: (ctx) => {
@@ -103,6 +113,23 @@ const commands = {
     store.users[ctx.chat.id].mexc.volBoostSetup5 = !store.users[ctx.chat.id].mexc.volBoostSetup5
 
     editVolBoostMessageText(ctx)
+  },
+
+  // MEXC POKUPANT
+  mexcPokupant: (ctx) => {
+    editPokupantMessageText(ctx)
+  },
+
+  mexcPokupantFutLong: (ctx) => {
+    store.users[ctx.chat.id].mexc.pokupantFutLong = !store.users[ctx.chat.id].mexc.pokupantFutLong
+
+    editPokupantMessageText(ctx)
+  },
+
+  mexcPokupantFutShort: (ctx) => {
+    store.users[ctx.chat.id].mexc.pokupantFutShort = !store.users[ctx.chat.id].mexc.pokupantFutShort
+
+    editPokupantMessageText(ctx)
   },
 }
 

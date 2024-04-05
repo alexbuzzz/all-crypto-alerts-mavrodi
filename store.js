@@ -5,14 +5,9 @@ const store = {
 
   customFilters: {},
 
-  lastAlertTimesWS: {
-    binance: {},
-    bybit: {},
-    okx: {},
-    mexc: {},
-    blofin: {},
-    gate: {},
-  },
+  pokupantCustomFilters: {},
+
+  lastAlertTimesPokupant: {},
 
   users: {},
 
