@@ -12,7 +12,7 @@ const start = () => {
       return
     }
 
-    const wsUrl = 'wss://contract.mexc.com/ws'
+    const wsUrl = 'wss://contract.mexc.com/edge'
     ws = new WebSocket(wsUrl)
 
     ws.on('open', () => {
